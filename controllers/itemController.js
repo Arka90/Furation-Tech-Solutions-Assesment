@@ -1,7 +1,5 @@
 const Item = require("../models/items");
 
-const APIFeatures = require("../util/apiFeature");
-
 exports.createItem = async (req, res) => {
   try {
     const doc = await Item.create(req.body);
@@ -21,13 +19,19 @@ exports.createItem = async (req, res) => {
 };
 exports.getAllItems = async (req, res) => {
   try {
-    let filter = {};
+    // Pagination Logic
 
-    if (req.params.tourId) filter = { tour: req.params.tourId };
+    // Setting page number
+    let page = Number(req.query.page) || 1;
 
-    const features = new APIFeatures(Item.find(filter), req.query).paginate();
+    //Setting limit
+    let limit = Number(req.query.limit) || 3;
 
-    const doc = await features.query;
+    // formula to skip
+    let skip = (page - 1) * limit;
+
+    // modifying the doc according to page
+    let doc = await Item.find().skip(skip).limit(limit);
 
     res.status(200).json({
       status: "sucess",
@@ -47,17 +51,24 @@ exports.getItem = async (req, res, next) => {
   try {
     const doc = await Item.findById(req.params.id);
 
-    res.status(200).json({
-      status: "sucess",
+    if (!doc) {
+      res.status(404).json({
+        status: "failure",
+        message: "Item not found!",
+      });
+    } else {
+      res.status(200).json({
+        status: "sucess",
 
-      data: {
-        data: doc,
-      },
-    });
+        data: {
+          data: doc,
+        },
+      });
+    }
   } catch (err) {
     res.status(404).json({
       status: "failure",
-      message: "Item not found!",
+      message: err.message,
     });
   }
 };
@@ -68,16 +79,24 @@ exports.editItem = async (req, res) => {
       runValidators: true,
     });
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        data: doc,
-      },
-    });
+    if (!doc) {
+      res.status(404).json({
+        status: "failure",
+        message: "Item to update not found!",
+      });
+    } else {
+      res.status(200).json({
+        status: "sucess",
+
+        data: {
+          data: doc,
+        },
+      });
+    }
   } catch (err) {
     res.status(404).json({
       status: "failure",
-      message: "Item to edit not found!",
+      message: err.message,
     });
   }
 };
@@ -86,14 +105,22 @@ exports.deleteItem = async (req, res, next) => {
   try {
     const doc = await Item.findByIdAndDelete(req.params.id);
 
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
+    if (!doc) {
+      res.status(404).json({
+        status: "failure",
+        message: "Item not found!",
+      });
+    } else {
+      res.status(200).json({
+        status: "sucess",
+
+        data: null,
+      });
+    }
   } catch (err) {
     res.status(404).json({
       status: "failure",
-      message: "Item to delete not found!",
+      message: err.message,
     });
   }
 };

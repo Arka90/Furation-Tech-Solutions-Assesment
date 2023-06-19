@@ -19,7 +19,7 @@ const itemSchema = new mongoose.Schema({
 
   stock: {
     type: Number,
-    default: 4.5,
+    default: 50,
   },
 });
 
