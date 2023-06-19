@@ -10,6 +10,7 @@
   "author": "Arka Sheikh",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.3.0",
     "passport": "^0.6.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "validator": "^13.9.0"
   }
 }

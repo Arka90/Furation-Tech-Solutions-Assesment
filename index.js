@@ -1,5 +1,5 @@
 const express = require("express");
-
+const passportJWT = require("./config/passport-jwt-strategy");
 const app = express();
 
 const port = 8000;

@@ -1,16 +1,27 @@
 const express = require("express");
 const itemController = require("../controllers/itemController");
 const router = express.Router();
+const passport = require("passport");
+const adminController = require("../controllers/adminController");
 
 router
   .route("/")
   .get(itemController.getAllItems)
-  .post(itemController.createItem);
+  .post(
+    passport.authenticate("jwt", { session: false }),
+    itemController.createItem
+  );
 
 router
   .route("/:id")
   .get(itemController.getItem)
-  .put(itemController.editItem)
-  .delete(itemController.deleteItem);
+  .put(
+    passport.authenticate("jwt", { session: false }),
+    itemController.editItem
+  )
+  .delete(
+    passport.authenticate("jwt", { session: false }),
+    itemController.deleteItem
+  );
 
 module.exports = router;
