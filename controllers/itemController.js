@@ -1,4 +1,5 @@
 const Item = require("../models/items");
+const logger = require("../util/logger");
 
 exports.createItem = async (req, res) => {
   try {
@@ -10,11 +11,14 @@ exports.createItem = async (req, res) => {
         data: doc,
       },
     });
+
+    logger.itemLogger.log("info", "Item sucessfully added");
   } catch (err) {
     res.status(409).json({
       status: "failure",
       message: err.message,
     });
+    logger.itemLogger.log("error", "Error adding item");
   }
 };
 exports.getAllItems = async (req, res) => {
@@ -40,11 +44,13 @@ exports.getAllItems = async (req, res) => {
         data: doc,
       },
     });
+    logger.itemLogger.log("info", "Items sucessfully returned");
   } catch (err) {
     res.status(409).json({
       status: "failure",
       message: err.message,
     });
+    logger.itemLogger.log("error", "Error in returning item");
   }
 };
 exports.getItem = async (req, res, next) => {
@@ -56,6 +62,7 @@ exports.getItem = async (req, res, next) => {
         status: "failure",
         message: "Item not found!",
       });
+      logger.itemLogger.log("error", "Item not found");
     } else {
       res.status(200).json({
         status: "sucess",
@@ -64,12 +71,14 @@ exports.getItem = async (req, res, next) => {
           data: doc,
         },
       });
+      logger.itemLogger.log("info", "Item found");
     }
   } catch (err) {
     res.status(404).json({
       status: "failure",
       message: err.message,
     });
+    logger.itemLogger.log("error", "Item not found");
   }
 };
 exports.editItem = async (req, res) => {
@@ -84,6 +93,7 @@ exports.editItem = async (req, res) => {
         status: "failure",
         message: "Item to update not found!",
       });
+      logger.itemLogger.log("error", "Item not found");
     } else {
       res.status(200).json({
         status: "sucess",
@@ -92,6 +102,7 @@ exports.editItem = async (req, res) => {
           data: doc,
         },
       });
+      logger.itemLogger.log("info", "Item sucessfully updated");
     }
   } catch (err) {
     res.status(404).json({
@@ -110,17 +121,21 @@ exports.deleteItem = async (req, res, next) => {
         status: "failure",
         message: "Item not found!",
       });
+      logger.itemLogger.log("error", "Item not found");
     } else {
       res.status(200).json({
         status: "sucess",
 
         data: null,
       });
+
+      logger.itemLogger.log("info", "Item sucessfully deleted");
     }
   } catch (err) {
     res.status(404).json({
       status: "failure",
       message: err.message,
     });
+    logger.itemLogger.log("error", "Item not found");
   }
 };
