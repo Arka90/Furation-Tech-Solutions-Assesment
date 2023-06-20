@@ -12,7 +12,10 @@
 
 ## Getting all items
 
-URL:localhost:3000/api/item
+URL:localhost:3000/api/item (This will return page one by default and each page can have 3 items)
+
+**to go to next page write localhost:3000/api/item?page=2 and so on**
+
 METHOD: GET
 
 ## Getting one item
